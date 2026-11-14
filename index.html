@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Selbsttest: nur eigene Dateien, keine Anfragen nach außen, keine Inline-Skripte oder -Styles -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; base-uri 'none'; form-action 'none'" />
+  <meta name="referrer" content="no-referrer" />
+  <title>QR-Codes ohne Ablaufdatum - Alblicht</title>
+  <meta name="description" content="Kostenloser QR-Code-Generator ohne Kurzlinks und ohne Ablaufdatum. Der Code entsteht in deinem Browser, deine Eingaben verlassen dein Gerät nicht." />
+  <meta name="theme-color" content="#080a12" />
+  <link rel="icon" href="favicon.ico" sizes="32x32" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preload" href="fonts/hanken-grotesk-variable.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="fonts/oswald-variable.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="css/basis.css" />
+  <link rel="stylesheet" href="css/qr.css" />
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#werkzeug">Zum Werkzeug springen</a>
+
+  <!-- ============ KOPF ============ -->
+  <header class="qr-head">
+    <div class="qr-wrap">
+      <div class="qr-head__bar">
+        <a class="qr-brand" href="https://alblicht.dev">
+          <svg class="qr-brand__mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 19 10 5M10.5 19 16.5 5M17 19l4-9"/></svg>
+          Alblicht
+        </a>
+        <a class="qr-head__link" href="https://github.com/alblicht/qr-codes">Quellcode</a>
+      </div>
+
+      <div class="qr-head__text">
+        <span class="eyebrow">Open Source · kostenlos</span>
+        <h1>QR-Codes <span class="qr-accent">ohne Ablaufdatum</span></h1>
+        <p>Dein Code enthält direkt deine Adresse. Kein Kurzlink, kein Konto, keine Testphase, die abläuft.</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="qr-page" id="werkzeug" tabindex="-1">
+    <noscript>
+      <p class="qr-noscript">Dieses Werkzeug braucht JavaScript, weil der QR-Code direkt in deinem Browser entsteht. Bitte aktiviere JavaScript für diese Seite.</p>
+    </noscript>
+
+    <!-- ============ WERKZEUG ============ -->
+    <form class="qr-wrap qr-tool" id="qrForm" novalidate aria-label="QR-Code erstellen">
+
+      <!-- ----- Eingabe ----- -->
+      <div class="qr-card qr-input">
+        <fieldset class="qr-types">
+          <legend class="qr-label">Was soll der Code enthalten?</legend>
+          <div class="qr-types__grid">
+            <label class="qr-type"><input type="radio" name="type" value="url" checked /><span>Webadresse</span></label>
+            <label class="qr-type"><input type="radio" name="type" value="text" /><span>Text</span></label>
+            <label class="qr-type"><input type="radio" name="type" value="email" /><span>E-Mail</span></label>
+            <label class="qr-type"><input type="radio" name="type" value="tel" /><span>Telefon</span></label>
+            <label class="qr-type"><input type="radio" name="type" value="wifi" /><span>WLAN</span></label>
+            <label class="qr-type"><input type="radio" name="type" value="vcard" /><span>Kontakt</span></label>
+          </div>
+        </fieldset>
+
+        <!-- Webadresse -->
+        <div class="qr-panel" data-panel="url">
+          <div class="qr-field">
+            <label class="qr-label" for="f-url-url">Webadresse</label>
+            <input class="qr-control" id="f-url-url" name="url" type="text" inputmode="url" autocomplete="url" spellcheck="false" autocapitalize="off" maxlength="2000" placeholder="z. B. verein-musterstadt.de" aria-describedby="h-url-url e-url-url" />
+            <p class="qr-hint" id="h-url-url">Das https:// davor ergänzen wir, falls es fehlt.</p>
+            <p class="qr-error" id="e-url-url" aria-live="polite"></p>
+          </div>
+        </div>
+
+        <!-- Text -->
+        <div class="qr-panel" data-panel="text" hidden>
+          <div class="qr-field">
+            <label class="qr-label" for="f-text-text">Text</label>
+            <textarea class="qr-control" id="f-text-text" name="text" rows="5" maxlength="2900" placeholder="z. B. Probe jeden Dienstag um 19:30 Uhr im Vereinsheim." aria-describedby="h-text-text e-text-text"></textarea>
+            <p class="qr-hint" id="h-text-text">Wird beim Scannen einfach angezeigt. Je kürzer, desto gröber und leichter lesbar wird der Code.</p>
+            <p class="qr-error" id="e-text-text" aria-live="polite"></p>
+          </div>
+        </div>
+
+        <!-- E-Mail -->
+        <div class="qr-panel" data-panel="email" hidden>
+          <div class="qr-field">
+            <label class="qr-label" for="f-email-to">E-Mail-Adresse</label>
+            <input class="qr-control" id="f-email-to" name="to" type="email" autocomplete="email" spellcheck="false" autocapitalize="off" maxlength="254" placeholder="z. B. info@verein-musterstadt.de" aria-describedby="e-email-to" />
+            <p class="qr-error" id="e-email-to" aria-live="polite"></p>
+          </div>
+          <div class="qr-field">
+            <label class="qr-label" for="f-email-subject">Betreff <span class="qr-optional">optional</span></label>
+            <input class="qr-control" id="f-email-subject" name="subject" type="text" maxlength="200" placeholder="z. B. Anmeldung Sommerfest" />
+          </div>
+          <div class="qr-field">
+            <label class="qr-label" for="f-email-body">Nachricht <span class="qr-optional">optional</span></label>
+            <textarea class="qr-control" id="f-email-body" name="body" rows="4" maxlength="1500" aria-describedby="h-email-body"></textarea>
+            <p class="qr-hint" id="h-email-body">Steht schon in der E-Mail, wenn sie sich öffnet. Abschicken muss man selbst.</p>
+          </div>
+        </div>
+
+        <!-- Telefon -->
+        <div class="qr-panel" data-panel="tel" hidden>
+          <div class="qr-field">
+            <label class="qr-label" for="f-tel-tel">Telefonnummer</label>
+            <input class="qr-control" id="f-tel-tel" name="tel" type="tel" autocomplete="tel" maxlength="40" placeholder="z. B. +49 7361 123456" aria-describedby="h-tel-tel e-tel-tel" />
+            <p class="qr-hint" id="h-tel-tel">Leerzeichen, Schrägstriche und Bindestriche entfernen wir automatisch.</p>
+            <p class="qr-error" id="e-tel-tel" aria-live="polite"></p>
+          </div>
+        </div>
+
+        <!-- WLAN -->
+        <div class="qr-panel" data-panel="wifi" hidden>
+          <div class="qr-field">
+            <label class="qr-label" for="f-wifi-ssid">Netzwerkname (SSID)</label>
+            <input class="qr-control" id="f-wifi-ssid" name="ssid" type="text" spellcheck="false" autocapitalize="off" autocomplete="off" maxlength="64" placeholder="z. B. Vereinsheim-Gast" aria-describedby="h-wifi-ssid" />
+            <p class="qr-hint" id="h-wifi-ssid">Genau so, wie er im Router steht, mit Groß- und Kleinschreibung.</p>
+          </div>
+          <div class="qr-field">
+            <label class="qr-label" for="f-wifi-security">Verschlüsselung</label>
+            <select class="qr-control" id="f-wifi-security" name="security">
+              <option value="WPA" selected>WPA2 oder WPA3 (üblich)</option>
+              <option value="WEP">WEP (veraltet)</option>
+              <option value="nopass">Ohne Passwort</option>
+            </select>
+          </div>
+          <div class="qr-field" data-requires-password>
+            <label class="qr-label" for="f-wifi-password">Passwort</label>
+            <input class="qr-control" id="f-wifi-password" name="password" type="text" spellcheck="false" autocapitalize="off" autocomplete="off" maxlength="64" aria-describedby="h-wifi-password" />
+            <p class="qr-hint" id="h-wifi-password">Wird sichtbar angezeigt, damit du Tippfehler sofort siehst.</p>
+          </div>
+          <label class="qr-check">
+            <input type="checkbox" name="hidden" />
+            <span>Verstecktes Netzwerk (Name wird nicht angezeigt)</span>
+          </label>
+        </div>
+
+        <!-- Kontakt -->
+        <div class="qr-panel" data-panel="vcard" hidden>
+          <p class="qr-hint qr-panel__intro">Nur ausfüllen, was auf die Visitenkarte soll. Name oder Organisation reicht.</p>
+          <div class="qr-row">
+            <div class="qr-field">
+              <label class="qr-label" for="f-vcard-firstName">Vorname</label>
+              <input class="qr-control" id="f-vcard-firstName" name="firstName" type="text" autocomplete="given-name" maxlength="100" />
+            </div>
+            <div class="qr-field">
+              <label class="qr-label" for="f-vcard-lastName">Nachname</label>
+              <input class="qr-control" id="f-vcard-lastName" name="lastName" type="text" autocomplete="family-name" maxlength="100" />
+            </div>
+          </div>
+          <div class="qr-row">
+            <div class="qr-field">
+              <label class="qr-label" for="f-vcard-org">Organisation</label>
+              <input class="qr-control" id="f-vcard-org" name="org" type="text" autocomplete="organization" maxlength="150" placeholder="z. B. Musikverein e. V." />
+            </div>
+            <div class="qr-field">
+              <label class="qr-label" for="f-vcard-title">Funktion</label>
+              <input class="qr-control" id="f-vcard-title" name="title" type="text" autocomplete="organization-title" maxlength="100" placeholder="z. B. Vorstand" />
+            </div>
+          </div>
+          <div class="qr-row">
+            <div class="qr-field">
+              <label class="qr-label" for="f-vcard-mobile">Mobil</label>
+              <input class="qr-control" id="f-vcard-mobile" name="mobile" type="tel" autocomplete="tel" maxlength="40" aria-describedby="e-vcard-mobile" />
+              <p class="qr-error" id="e-vcard-mobile" aria-live="polite"></p>
+            </div>
+            <div class="qr-field">
+              <label class="qr-label" for="f-vcard-phone">Festnetz</label>
+              <input class="qr-control" id="f-vcard-phone" name="phone" type="tel" maxlength="40" aria-describedby="e-vcard-phone" />
+              <p class="qr-error" id="e-vcard-phone" aria-live="polite"></p>
+            </div>
+          </div>
+          <div class="qr-row">
+            <div class="qr-field">
+              <label class="qr-label" for="f-vcard-email">E-Mail</label>
+              <input class="qr-control" id="f-vcard-email" name="email" type="email" autocomplete="email" spellcheck="false" autocapitalize="off" maxlength="254" aria-describedby="e-vcard-email" />
+              <p class="qr-error" id="e-vcard-email" aria-live="polite"></p>
+            </div>
+            <div class="qr-field">
+              <label class="qr-label" for="f-vcard-url">Webseite</label>
+              <input class="qr-control" id="f-vcard-url" name="url" type="text" inputmode="url" autocomplete="url" spellcheck="false" autocapitalize="off" maxlength="300" aria-describedby="e-vcard-url" />
+              <p class="qr-error" id="e-vcard-url" aria-live="polite"></p>
+            </div>
+          </div>
+          <div class="qr-field">
+            <label class="qr-label" for="f-vcard-street">Straße und Hausnummer</label>
+            <input class="qr-control" id="f-vcard-street" name="street" type="text" autocomplete="street-address" maxlength="150" />
+          </div>
+          <div class="qr-row qr-row--zip">
+            <div class="qr-field">
+              <label class="qr-label" for="f-vcard-zip">PLZ</label>
+              <input class="qr-control" id="f-vcard-zip" name="zip" type="text" inputmode="numeric" autocomplete="postal-code" maxlength="12" />
+            </div>
+            <div class="qr-field">
+              <label class="qr-label" for="f-vcard-city">Ort</label>
+              <input class="qr-control" id="f-vcard-city" name="city" type="text" autocomplete="address-level2" maxlength="100" />
+            </div>
+          </div>
+          <div class="qr-field">
+            <label class="qr-label" for="f-vcard-country">Land</label>
+            <input class="qr-control" id="f-vcard-country" name="country" type="text" autocomplete="country-name" maxlength="60" placeholder="z. B. Deutschland" />
+          </div>
+          <div class="qr-field">
+            <label class="qr-label" for="f-vcard-note">Notiz</label>
+            <textarea class="qr-control" id="f-vcard-note" name="note" rows="3" maxlength="500" placeholder="z. B. Sprechzeit dienstags ab 18 Uhr"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- ----- Vorschau und Download ----- -->
+      <section class="qr-card qr-preview" aria-labelledby="qr-preview-title">
+        <h2 class="qr-preview__title" id="qr-preview-title">Dein QR-Code</h2>
+
+        <div class="qr-preview__frame">
+          <svg class="qr-preview__svg" id="qrSvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29" shape-rendering="crispEdges" role="img" aria-label="QR-Code" hidden>
+            <rect id="qrSvgBg" width="29" height="29" fill="#ffffff" />
+            <path id="qrSvgPath" d="" fill="#000000" />
+          </svg>
+          <p class="qr-preview__empty" id="qrEmpty">Gib ein, was im Code stehen soll. Die Vorschau erscheint sofort.</p>
+        </div>
+
+        <dl class="qr-facts" id="qrFacts" hidden>
+          <div><dt>Größe</dt><dd id="qrFactSize"></dd></div>
+          <div><dt>Fehlerkorrektur</dt><dd id="qrFactEcl"></dd></div>
+          <div><dt>Druck ab</dt><dd id="qrFactPrint"></dd></div>
+        </dl>
+
+        <ul class="qr-notes" id="qrNotes" aria-live="polite"></ul>
+
+        <div class="qr-downloads">
+          <button type="button" class="btn btn--accent qr-dl" id="dlSvg" disabled>SVG für den Druck</button>
+          <div class="qr-png">
+            <label class="sr-only" for="pngSize">PNG-Größe</label>
+            <select class="qr-control qr-png__size" id="pngSize">
+              <option value="512">512 px</option>
+              <option value="1024" selected>1024 px</option>
+              <option value="2048">2048 px</option>
+            </select>
+            <button type="button" class="btn btn--ghost qr-dl" id="dlPng" disabled>PNG laden</button>
+          </div>
+        </div>
+
+        <div class="qr-test">
+          <p class="qr-test__title">Vor dem Druck mit dem Handy testen</p>
+          <p>Scanne den Code mit zwei verschiedenen Handys, aus dem Abstand, aus dem später gescannt wird. Erst dann in Druck geben.</p>
+        </div>
+      </section>
+
+      <!-- ----- Darstellung ----- -->
+      <details class="qr-card qr-options">
+        <summary class="qr-options__summary">
+          <span class="qr-options__title">Darstellung anpassen</span>
+          <span class="qr-options__sub">Fehlerkorrektur, Farben, Ruhezone</span>
+        </summary>
+
+        <div class="qr-options__body">
+          <div class="qr-field">
+            <label class="qr-label" for="optEcl">Fehlerkorrektur</label>
+            <select class="qr-control" id="optEcl" name="ecl" aria-describedby="h-optEcl">
+              <option value="L">L: kleinster Code (7 %)</option>
+              <option value="M" selected>M: Standard (15 %)</option>
+              <option value="Q">Q: robuster (25 %)</option>
+              <option value="H">H: am robustesten (30 %)</option>
+            </select>
+            <p class="qr-hint" id="h-optEcl">So viel des Codes darf verdeckt oder verschmutzt sein. Höher heißt robuster, aber feiner.</p>
+          </div>
+
+          <div class="qr-row">
+            <div class="qr-field">
+              <label class="qr-label" for="optFg">Farbe des Codes</label>
+              <div class="qr-color">
+                <input class="qr-color__input" id="optFg" name="fg" type="color" value="#000000" aria-describedby="v-optFg" />
+                <output class="qr-color__value" id="v-optFg" for="optFg">#000000</output>
+              </div>
+            </div>
+            <div class="qr-field">
+              <label class="qr-label" for="optBg">Hintergrund</label>
+              <div class="qr-color">
+                <input class="qr-color__input" id="optBg" name="bg" type="color" value="#ffffff" aria-describedby="v-optBg" />
+                <output class="qr-color__value" id="v-optBg" for="optBg">#ffffff</output>
+              </div>
+            </div>
+          </div>
+          <div class="qr-color-actions">
+            <button type="button" class="btn btn--ghost qr-btn-sm" id="swapColors">Farben tauschen</button>
+            <button type="button" class="btn btn--ghost qr-btn-sm" id="resetColors">Schwarz auf Weiß</button>
+          </div>
+
+          <div class="qr-field">
+            <label class="qr-label" for="optBorder">Ruhezone</label>
+            <select class="qr-control" id="optBorder" name="border" aria-describedby="h-optBorder">
+              <option value="0">0 Module</option>
+              <option value="1">1 Modul</option>
+              <option value="2">2 Module</option>
+              <option value="3">3 Module</option>
+              <option value="4" selected>4 Module (Standard)</option>
+              <option value="6">6 Module</option>
+              <option value="8">8 Module</option>
+            </select>
+            <p class="qr-hint" id="h-optBorder">Der helle Rand um den Code. Handy-Kameras brauchen ihn, um den Code zu finden.</p>
+          </div>
+        </div>
+      </details>
+    </form>
+
+    <!-- ============ WARUM ============ -->
+    <section class="qr-wrap qr-why" aria-labelledby="qr-why-title">
+      <h2 class="qr-h2" id="qr-why-title">Warum <span class="qr-accent">ohne Ablaufdatum?</span></h2>
+      <p class="qr-lead">Viele Gratis-Generatoren schreiben nicht deine Adresse in den Code, sondern einen eigenen Kurzlink. Läuft die Testphase aus, schalten sie ihn ab. Die gedruckten Flyer zeigen dann ins Leere.</p>
+
+      <div class="qr-compare">
+        <div class="qr-compare__item">
+          <p class="qr-compare__title">Mit Kurzlink</p>
+          <ol class="qr-flow">
+            <li>QR-Code</li>
+            <li class="qr-flow__weak">Kurzlink des Anbieters</li>
+            <li>Deine Seite</li>
+          </ol>
+          <p>Der Anbieter steht dazwischen. Er kann den Link abschalten, kostenpflichtig machen oder Scans mitzählen.</p>
+        </div>
+        <div class="qr-compare__item qr-compare__item--good">
+          <p class="qr-compare__title">Hier</p>
+          <ol class="qr-flow">
+            <li>QR-Code</li>
+            <li>Deine Seite</li>
+          </ol>
+          <p>Nichts dazwischen. Der Code funktioniert, solange es deine Adresse gibt, auch ohne uns.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FRAGEN ============ -->
+    <section class="qr-wrap qr-faq" aria-labelledby="qr-faq-title">
+      <h2 class="qr-h2" id="qr-faq-title">Gut zu wissen</h2>
+      <div class="qr-faq__list">
+        <details class="qr-faq__item">
+          <summary>Werden meine Eingaben gespeichert oder verschickt?</summary>
+          <p>Nein. Der Code entsteht in deinem Browser. Die Seite lädt keine fremden Dateien, setzt keine Cookies und zählt nichts mit. Schließt du das Fenster, ist alles weg.</p>
+        </details>
+        <details class="qr-faq__item">
+          <summary>Läuft der Code wirklich nie ab?</summary>
+          <p>Der Code enthält deine Angaben direkt. Er funktioniert, solange zum Beispiel deine Webadresse erreichbar ist. Ziehst du auf eine neue Adresse um, brauchst du einen neuen Code.</p>
+        </details>
+        <details class="qr-faq__item">
+          <summary>SVG oder PNG?</summary>
+          <p>SVG für Druckerei und Grafikprogramme, es bleibt in jeder Größe scharf. PNG für Word, E-Mails und soziale Netzwerke.</p>
+        </details>
+        <details class="qr-faq__item">
+          <summary>Wie groß muss der Code gedruckt werden?</summary>
+          <p>Die Vorschau zeigt eine Mindestbreite. Als Faustregel gilt: Abstand zum Code geteilt durch 10. Wer aus 2 Metern scannen soll, braucht also etwa 20 cm.</p>
+        </details>
+        <details class="qr-faq__item">
+          <summary>Welche Fehlerkorrektur passt?</summary>
+          <p>M passt fast immer. H lohnt sich, wenn der Code draußen hängt und verschmutzen kann. L macht den Code gröber, wenn sehr viel Inhalt hineinmuss.</p>
+        </details>
+        <details class="qr-faq__item">
+          <summary>Ist das WLAN-Passwort im Code sicher?</summary>
+          <p>Wer den Code scannt, kennt danach das Passwort. Bei einem Gäste-WLAN ist das gewollt. Für dein internes Netz solltest du keinen Aushang machen.</p>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FUSS ============ -->
+  <footer class="qr-foot">
+    <div class="qr-wrap qr-foot__inner">
+      <p>Individuell programmiert von <a href="https://alblicht.dev">Alblicht</a>. Open Source unter MIT-Lizenz.</p>
+      <nav class="qr-foot__nav" aria-label="Rechtliches und Quellcode">
+        <a href="https://github.com/alblicht/qr-codes">Quellcode</a>
+        <a href="https://alblicht.dev/impressum">Impressum</a>
+        <a href="https://alblicht.dev/datenschutz">Datenschutz</a>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>

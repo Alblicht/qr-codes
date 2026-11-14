@@ -1,0 +1,19 @@
+{
+  "name": "qr-codes-ohne-ablaufdatum",
+  "version": "1.0.0",
+  "description": "QR-Codes ohne Ablaufdatum: komplett im Browser erzeugt, ohne Konto, ohne Kurzlinks, ohne Server.",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "author": "Daniel Maresch (Alblicht)",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test",
+    "serve": "node tools/serve.js"
+  },
+  "devDependencies": {
+    "jsqr": "1.4.0"
+  }
+}
